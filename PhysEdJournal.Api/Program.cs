@@ -1,4 +1,6 @@
 using System.Security.Cryptography;
+using System.Text.Json.Serialization;
+using FastEndpoints;
 using HotChocolate.Data.Filters;
 using HotChocolate.Data.Filters.Expressions;
 using HotChocolate.Types.Pagination;
@@ -16,7 +18,6 @@ using PhysEdJournal.Api.Monitoring.Logging;
 using PhysEdJournal.Infrastructure;
 using PhysEdJournal.Infrastructure.Database;
 using PhysEdJournal.Infrastructure.DI;
-using Prometheus;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
@@ -102,6 +103,7 @@ builder.Services.AddScoped<MeInfoService>();
     Utils
  */
 
+builder.Services.AddFastEndpoints();
 builder.Services.AddControllers();
 builder.Services.AddCors();
 builder.Services.AddEndpointsApiExplorer();
@@ -159,7 +161,6 @@ app.UseCors(corsPolicyBuilder =>
     corsPolicyBuilder.AllowAnyOrigin();
     corsPolicyBuilder.AllowAnyHeader();
 });
-app.UseMetricServer();
 
 app.UseSerilogRequestLogging();
 
@@ -169,6 +170,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseUserGuidLogger();
+
+app.MapFastEndpoints(c =>
+{
+    c.Serializer.Options.Converters.Add(new JsonStringEnumConverter());
+    c.Serializer.Options.Converters.Add(new DateOnlyJsonConverter());
+});
+
 app.MapControllers();
 app.MapGraphQL();
 
