@@ -2,6 +2,7 @@
 using PhysEdJournal.Core.Entities.DB;
 using PhysEdJournal.Core.Entities.Types;
 using PhysEdJournal.Core.Exceptions.TeacherExceptions;
+using PhysEdJournal.Core.PResult;
 using PhysEdJournal.Infrastructure.Database;
 
 namespace PhysEdJournal.Api;
@@ -17,14 +18,14 @@ public class PermissionValidator
         _memoryCache = memoryCache;
     }
 
-    public async ValueTask<LanguageExt.Common.Result<bool>> ValidateTeacherPermissions(
+    public async ValueTask<PResult<bool>> ValidateTeacherPermissions(
         string teacherGuid,
         TeacherPermissions requiredPermissions
     )
     {
         if (requiredPermissions == TeacherPermissions.DefaultAccess)
         {
-            return new LanguageExt.Common.Result<bool>(true);
+            return true;
         }
 
         _memoryCache.TryGetValue(teacherGuid, out TeacherEntity? teacher);
@@ -35,9 +36,7 @@ public class PermissionValidator
 
             if (teacher is null)
             {
-                return new LanguageExt.Common.Result<bool>(
-                    new TeacherNotFoundException(teacherGuid)
-                );
+                return new TeacherNotFoundException(teacherGuid);
             }
 
             _memoryCache.Set(
@@ -54,12 +53,10 @@ public class PermissionValidator
 
         if (!hasEnough)
         {
-            return new LanguageExt.Common.Result<bool>(
-                new NotEnoughPermissionsException(
-                    teacherGuid,
-                    teacher.Permissions,
-                    requiredPermissions
-                )
+            return new NotEnoughPermissionsException(
+                teacherGuid,
+                teacher.Permissions,
+                requiredPermissions
             );
         }
 
