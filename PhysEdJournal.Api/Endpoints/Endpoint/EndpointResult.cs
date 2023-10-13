@@ -1,4 +1,4 @@
-﻿namespace PhysEdJournal.Api.Endpoints.BaseEndpoint;
+﻿namespace PhysEdJournal.Api.Endpoints.Endpoint;
 
 public readonly struct EndpointResult<T>
 {
@@ -21,7 +21,7 @@ public readonly struct EndpointResult<T>
         _isSuccess = false;
         _error = error;
         _value = default!;
-        StatusCode = error.Status;
+        StatusCode = error.StatusCode;
     }
 
     public async Task MatchAsync(Func<T, Task> success, Func<ProblemDetailsResponse, Task> failure)

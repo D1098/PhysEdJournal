@@ -1,13 +1,13 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace PhysEdJournal.Api.Endpoints.BaseEndpoint;
+namespace PhysEdJournal.Api.Endpoints.Endpoint;
 
 public sealed class CustomProblemDetailsJsonConverter : JsonConverter<ProblemDetailsResponse>
 {
     private static readonly JsonEncodedText Type = JsonEncodedText.Encode("type");
     private static readonly JsonEncodedText Title = JsonEncodedText.Encode("title");
-    private static readonly JsonEncodedText Status = JsonEncodedText.Encode("status");
+    private static readonly JsonEncodedText StatusCode = JsonEncodedText.Encode("status_code");
     private static readonly JsonEncodedText Detail = JsonEncodedText.Encode("detail");
 
     public override ProblemDetailsResponse Read(
@@ -40,7 +40,7 @@ public sealed class CustomProblemDetailsJsonConverter : JsonConverter<ProblemDet
 
         writer.WriteString(Title, value.Title);
 
-        writer.WriteNumber(Status, value.Status);
+        writer.WriteNumber(StatusCode, value.StatusCode);
 
         writer.WriteString(Detail, value.Detail);
 
@@ -60,7 +60,7 @@ public sealed class CustomProblemDetailsJsonConverter : JsonConverter<ProblemDet
     }
 }
 
-[Newtonsoft.Json.JsonConverter(typeof(CustomProblemDetailsJsonConverter))]
+[JsonConverter(typeof(CustomProblemDetailsJsonConverter))]
 public sealed class ProblemDetailsResponse
 {
     [JsonPropertyName("type")]
@@ -69,8 +69,8 @@ public sealed class ProblemDetailsResponse
     [JsonPropertyName("title")]
     public required string Title { get; init; }
 
-    [JsonPropertyName("status")]
-    public required int Status { get; init; }
+    [JsonPropertyName("status_code")]
+    public required int StatusCode { get; init; }
 
     [JsonPropertyName("detail")]
     public required string Detail { get; init; }
