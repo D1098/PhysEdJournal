@@ -7,7 +7,7 @@ using PhysEdJournal.Infrastructure.Database;
 
 namespace PhysEdJournal.Api;
 
-public class PermissionValidator
+public sealed class PermissionValidator
 {
     private readonly ApplicationContext _applicationContext;
     private readonly IMemoryCache _memoryCache;

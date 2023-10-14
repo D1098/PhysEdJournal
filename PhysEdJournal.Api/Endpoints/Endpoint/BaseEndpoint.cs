@@ -34,12 +34,18 @@ public abstract class BaseEndpoint<TRequest, TResponse> : Endpoint<TRequest, TRe
         {
             using (LogContext.PushProperty("UserGuid", userClaim?.Value))
             {
-                var result = await ExecuteCommand(req, ct);
+                var err = await BeforeCommandExecuteAsync(req);
+                if (err is not null)
+                {
+                    await SendErrorResponseAsync(err);
+                    return;
+                }
+
+                var result = await ExecuteCommandAsync(req, ct);
 
                 await result.MatchAsync(
                     async response => await SendAsync(response, result.StatusCode, ct),
-                    async error =>
-                        await SendResultAsync(Results.Json(error, statusCode: error.StatusCode))
+                    async error => await SendErrorResponseAsync(error)
                 );
             }
         }
@@ -61,8 +67,18 @@ public abstract class BaseEndpoint<TRequest, TResponse> : Endpoint<TRequest, TRe
         }
     }
 
-    protected abstract Task<EndpointResult<TResponse>> ExecuteCommand(
+    protected abstract Task<EndpointResult<TResponse>> ExecuteCommandAsync(
         TRequest request,
         CancellationToken ct = default
     );
+
+    protected virtual Task<ProblemDetailsResponse?> BeforeCommandExecuteAsync(TRequest req)
+    {
+        return Task.FromResult<ProblemDetailsResponse?>(null);
+    }
+
+    private async Task SendErrorResponseAsync(ProblemDetailsResponse err)
+    {
+        await SendResultAsync(Results.Json(err, statusCode: err.StatusCode));
+    }
 }
