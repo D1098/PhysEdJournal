@@ -6,11 +6,11 @@ namespace PhysEdJournal.Api.Endpoints.Endpoint;
 public abstract class CommandEndpoint<TRequest, TResponse> : BaseEndpoint<TRequest, TResponse>
     where TRequest : notnull
 {
-    protected override EndpointType EndpointType { get; init; } = EndpointType.Command;
+    protected sealed override EndpointType EndpointType { get; init; } = EndpointType.Command;
 
     public required PermissionValidator PermissionValidator { get; init; }
 
-    private TeacherPermissions _teacherPermissions;
+    private TeacherPermissions _teacherPermissions = TeacherPermissions.SuperUser;
 
     protected delegate Task<PResult<bool>> TeacherPermissionsValidator(
         TRequest req,

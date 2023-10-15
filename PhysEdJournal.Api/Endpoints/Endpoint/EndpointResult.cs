@@ -2,15 +2,16 @@
 
 public readonly struct EndpointResult<T>
 {
-    private readonly bool _isSuccess;
     private readonly T _value;
     private readonly ProblemDetailsResponse _error;
+
+    public bool IsSuccess { get; }
 
     public int StatusCode { get; }
 
     public EndpointResult(T value, int statusCode = 200)
     {
-        _isSuccess = true;
+        IsSuccess = true;
         _error = default!;
         _value = value;
         StatusCode = statusCode;
@@ -18,15 +19,25 @@ public readonly struct EndpointResult<T>
 
     public EndpointResult(ProblemDetailsResponse error)
     {
-        _isSuccess = false;
+        IsSuccess = false;
         _error = error;
         _value = default!;
         StatusCode = error.StatusCode;
     }
 
+    public T UnsafeGet()
+    {
+        if (!IsSuccess)
+        {
+            throw new Exception("Trying to access value in Faulted state");
+        }
+
+        return _value;
+    }
+
     public async Task MatchAsync(Func<T, Task> success, Func<ProblemDetailsResponse, Task> failure)
     {
-        if (_isSuccess)
+        if (IsSuccess)
         {
             await success(_value);
         }
