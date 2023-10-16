@@ -5,6 +5,14 @@ public abstract class OffsetPaginationQueryEndpoint<TRequest, TResponse>
     where TRequest : PaginationRequest
     where TResponse : PaginationResponse
 {
+    private static readonly PaginationValidator<TRequest> PaginationValidator = new();
+
+    public override void Configure()
+    {
+        base.Configure();
+        AddRequestValidator(PaginationValidator);
+    }
+
     protected sealed override async Task<EndpointResult<TResponse>> ExecuteCommandAsync(
         TRequest request,
         CancellationToken ct = default

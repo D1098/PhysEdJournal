@@ -8,7 +8,7 @@ public class PaginationRequest
     /// <summary>
     /// Page number.
     /// </summary>
-    public int Page { get; set; } = 1;
+    public int Page { get; init; } = 1;
 
     /// <summary>
     /// Amount of data you need on single page. Must be greater than 0.
@@ -16,6 +16,6 @@ public class PaginationRequest
     public int PageSize
     {
         get => _pageSize;
-        set => _pageSize = value > MaxPageSize ? MaxPageSize : value;
+        init => _pageSize = value > MaxPageSize ? MaxPageSize : value;
     }
 }
