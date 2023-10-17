@@ -1,5 +1,11 @@
 ﻿namespace PhysEdJournal.Api.Endpoints.Endpoint;
 
+/// <summary>
+/// Результат завершения обработки запроса.
+/// Может быть либо успешным, либо провальным.
+/// Если выполнение запроса завершается ошибкой, то нужно вернуть объект <see cref="ProblemDetailsResponse"/>.
+/// </summary>
+/// <typeparam name="T">Объект запроса.</typeparam>
 public readonly struct EndpointResult<T>
 {
     private readonly T _value;

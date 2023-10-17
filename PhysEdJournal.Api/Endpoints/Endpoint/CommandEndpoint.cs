@@ -18,11 +18,19 @@ public abstract class CommandEndpoint<TRequest, TResponse> : BaseEndpoint<TReque
     );
     private TeacherPermissionsValidator? _teacherPermissionsValidator;
 
+    /// <summary>
+    /// Устанавливает необходимые разрешения для преподавателя.
+    /// </summary>
+    /// <param name="permissions"><see cref="TeacherPermissions"/>.</param>
     protected void SetTeacherPermissions(TeacherPermissions permissions)
     {
         _teacherPermissions = permissions;
     }
 
+    /// <summary>
+    /// Устанавливает валидатор разрешений для преподавателя.
+    /// </summary>
+    /// <param name="validator"><see cref="TeacherPermissionsValidator"/>.</param>
     protected void SetTeacherPermissions(TeacherPermissionsValidator validator)
     {
         _teacherPermissionsValidator = validator;

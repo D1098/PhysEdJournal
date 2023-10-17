@@ -19,10 +19,21 @@ internal static class OperationToString
 public abstract class BaseEndpoint<TRequest, TResponse> : Endpoint<TRequest, TResponse>
     where TRequest : notnull
 {
+    /// <summary>
+    /// Контекст, используемый для передачи дополнительных параметров в результирующий лог,
+    /// который будет записан по окончанию запроса.
+    /// </summary>
     public required IDiagnosticContext DiagnosticContext { get; init; }
 
     private static List<AbstractValidator<TRequest>>? _requestValidators;
 
+    /// <summary>
+    /// Метод добавления валидотора запроса.
+    /// Поддерживает несколько валидаторов одновременно.
+    /// Если добавили больше 1 валидатора, то все они отработают, и в случае завершения хотя бы 1 с ошибкой,
+    /// запрос завершится в ответе будут собраны все ошибки всех валидаторов.
+    /// </summary>
+    /// <param name="validator">Валидатор запроса из библиотеки FluentValidation.</param>
     protected static void AddRequestValidator(AbstractValidator<TRequest> validator)
     {
         if (_requestValidators is null)
@@ -89,11 +100,23 @@ public abstract class BaseEndpoint<TRequest, TResponse> : Endpoint<TRequest, TRe
         }
     }
 
+    /// <summary>
+    /// Хэндлер эндпоинта, вызывается для обработки каждого запроса.
+    /// </summary>
+    /// <param name="request">Объект запроса.</param>
+    /// <param name="ct">CancellationToken.</param>
+    /// <returns><see cref="EndpointResult{T}"/>.</returns>
     protected abstract Task<EndpointResult<TResponse>> ExecuteCommandAsync(
         TRequest request,
         CancellationToken ct = default
     );
 
+    /// <summary>
+    /// Используется, если нужно выполнить какую-то логику перед запросом
+    /// и, возможно, прервать запрос до выполнения команды.
+    /// </summary>
+    /// <param name="req">Объект запроса.</param>
+    /// <returns><see cref="ProblemDetailsResponse"/> или null, если все впорядке.</returns>
     protected virtual Task<ProblemDetailsResponse?> BeforeCommandExecuteAsync(TRequest req)
     {
         return Task.FromResult<ProblemDetailsResponse?>(null);
