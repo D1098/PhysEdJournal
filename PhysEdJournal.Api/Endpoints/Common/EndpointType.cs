@@ -1,4 +1,4 @@
-﻿namespace PhysEdJournal.Api.Endpoints.Endpoint;
+﻿namespace PhysEdJournal.Api.Endpoints.Common;
 
 public enum EndpointType
 {

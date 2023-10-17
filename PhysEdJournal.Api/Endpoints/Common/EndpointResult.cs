@@ -1,4 +1,4 @@
-﻿namespace PhysEdJournal.Api.Endpoints.Endpoint;
+﻿namespace PhysEdJournal.Api.Endpoints.Common;
 
 /// <summary>
 /// Результат завершения обработки запроса.

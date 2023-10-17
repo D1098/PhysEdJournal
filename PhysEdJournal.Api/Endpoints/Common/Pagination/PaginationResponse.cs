@@ -1,4 +1,4 @@
-﻿namespace PhysEdJournal.Api.Endpoints.Endpoint.Pagination;
+﻿namespace PhysEdJournal.Api.Endpoints.Common.Pagination;
 
 public class PaginationResponse
 {

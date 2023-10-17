@@ -1,4 +1,4 @@
-﻿namespace PhysEdJournal.Api.Endpoints.Endpoint.Pagination;
+﻿namespace PhysEdJournal.Api.Endpoints.Common.Pagination;
 
 public abstract class OffsetPaginationQueryEndpoint<TRequest, TResponse>
     : QueryEndpoint<TRequest, TResponse>

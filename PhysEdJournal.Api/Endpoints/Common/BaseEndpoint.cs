@@ -4,7 +4,7 @@ using FluentValidation;
 using Serilog;
 using Serilog.Context;
 
-namespace PhysEdJournal.Api.Endpoints.Endpoint;
+namespace PhysEdJournal.Api.Endpoints.Common;
 
 internal static class OperationToString
 {

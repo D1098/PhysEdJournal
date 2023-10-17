@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace PhysEdJournal.Api.Endpoints.Endpoint;
+namespace PhysEdJournal.Api.Endpoints.Common;
 
 public sealed class CustomProblemDetailsJsonConverter : JsonConverter<ProblemDetailsResponse>
 {

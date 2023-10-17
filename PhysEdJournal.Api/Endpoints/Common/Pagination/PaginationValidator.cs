@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace PhysEdJournal.Api.Endpoints.Endpoint.Pagination;
+namespace PhysEdJournal.Api.Endpoints.Common.Pagination;
 
 public sealed class PaginationValidator<T> : AbstractValidator<T>
     where T : PaginationRequest

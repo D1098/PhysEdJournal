@@ -1,7 +1,7 @@
 ﻿using PhysEdJournal.Core.Entities.Types;
 using PhysEdJournal.Core.PResult;
 
-namespace PhysEdJournal.Api.Endpoints.Endpoint;
+namespace PhysEdJournal.Api.Endpoints.Common;
 
 public abstract class CommandEndpoint<TRequest, TResponse> : BaseEndpoint<TRequest, TResponse>
     where TRequest : notnull
