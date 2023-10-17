@@ -1,20 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using FastEndpoints;
+﻿using FastEndpoints;
 using FluentValidation;
 using Serilog;
 using Serilog.Context;
 
 namespace PhysEdJournal.Api.Endpoints.Common;
-
-internal static class OperationToString
-{
-    internal static ReadOnlyDictionary<EndpointType, string> Stringify { get; } =
-        new Dictionary<EndpointType, string>
-        {
-            { EndpointType.Query, "Query" },
-            { EndpointType.Command, "Command" },
-        }.AsReadOnly();
-}
 
 public abstract class BaseEndpoint<TRequest, TResponse> : Endpoint<TRequest, TResponse>
     where TRequest : notnull
@@ -53,7 +42,7 @@ public abstract class BaseEndpoint<TRequest, TResponse> : Endpoint<TRequest, TRe
         var userClaim = User.FindFirst("IndividualGuid");
 
         DiagnosticContext.Set("UserGuid", userClaim?.Value);
-        DiagnosticContext.Set("OperationType", OperationToString.Stringify[EndpointType]);
+        DiagnosticContext.Set("OperationType", EndpointType.Stringify());
         DiagnosticContext.Set("Args", req);
 
         try
